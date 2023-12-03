@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人口统计</title>
+    <style>
+        html,body,h1,h2,h3,h4,h5,h6,p,ul,li{margin: 0px;padding: 0px;font: 14px "SimHei";}
+        #china-map-container {
+            background: url(./assects/images/background.jpg) center;
+            height: 96vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #china-map-left{
+            width: 25%;
+            height: 100%;
+        }
+        #china-map-left_up{
+            width: 125%;
+            margin-top: 2%;
+            margin-bottom: 2%;
+            height: 48%;
+        }
+        #china-map-left_down{
+            height: 48%;
+            width: 110%;
+        }
+        #china-map {
+            width: 50%;
+            height: 100%;
+        }
+        #right{
+            width: 25%;
+            height: 100%;
+        }
+        #china-map-right_up{
+            width: 111%;
+            margin-left: -16%;
+            margin-top: 2%;
+            margin-bottom: 2%;
+            height: 48%;
+            padding-top: 6%;
+        }
+        #china-map-right_down{
+            width: 122%;
+            margin-left: -30%;
+            height: 48%;
+            padding-top: 2%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="china-map-container">
+        <div id="china-map-left">
+            <div id="china-map-left_up"></div>
+            <div id="china-map-left_down"></div>
+        </div>
+        <div id="china-map"></div>
+        <div id="right">
+            <div id="china-map-right_up"></div>
+            <div id="china-map-right_down"></div>
+        </div>
+    </div>    
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="./assects/js/echarts.min.js"></script>
+<script type="text/javascript" src="./assects/js/chinamap.js"></script>
+<script type="text/javascript" src="./assects/js/home1-left_up.js"></script>
+<script type="text/javascript" src="./assects/js/home1-left_down.js"></script>
+<script type="text/javascript" src="./assects/js/home1-right_up.js"></script>
+<script type="text/javascript" src="./assects/js/home1-right_down.js"></script>
+</html>

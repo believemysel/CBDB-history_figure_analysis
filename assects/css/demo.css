@@ -1,0 +1,131 @@
+* {
+    padding: 0;
+    margin: 0
+}
+body{
+    background: url(../images/background.jpg) center;
+}
+/* 创建一个包含两个列的网格布局 */
+.net {
+    display: flex; /* 使用flex布局 */
+    justify-content: space-between; /* 列之间平均分配空间 */
+}
+
+/* 左侧列的样式，宽度设置为50% */
+.say {
+    width: 30%;
+    height: 95vh;
+    margin-top: 3px;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column; /* 使得内容垂直排列 */
+    justify-content: center; /* 在列中垂直居中内容 */
+    align-items: flex-start; /* 左对齐内容 */
+}
+
+
+/* 右侧列的样式，宽度设置为50% */
+.network {
+    margin-top: 6px;
+    padding: 0;
+    width: 70%;
+    height: 95vh;
+    border-left: 2.5px solid #95302e; /* Add a red left border */
+}
+
+.link.inactive,
+.linetext.inactive,
+.node.inactive image,
+.node.inactive text {
+    opacity: .2;
+}
+.tooltip {
+    font-family:  "KaiTi", "serif";
+    font-size: 12px;
+    width: 220px;
+    height: auto;
+    z-index: 2;
+    position: absolute;
+    background: #fff;
+    opacity: 0.5;
+    border-radius: 5px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+}
+.tooltip .title {
+    color: #fff;
+    padding: 5px;
+    font-size: 14px;
+    background-color: #d2a36c;
+    border-radius: 5px 5px 0 0;
+}
+.tooltip .detail-info {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #d2a36c;
+}
+.tooltip .detail-info td {
+    padding: 3px 5px;
+    color: #666;
+    vertical-align: middle;
+}
+.tooltip .detail-info tr:nth-of-type(odd) {
+    background: #f9f9f9;
+}
+.tooltip .detail-info td.td-label {
+    color: #333;
+    width:60px;
+}
+.tooltip .detail-info td a {
+    color: #666
+}
+.search-box{
+    position: absolute;
+    left: 30%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    background-color: #a04c3b;
+    height: 30px;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 40px;
+}
+.search-txt{
+    border:none;
+    background: none;
+    outline: none;
+    float: left;
+    padding: 0;
+    color: #fff;
+    font: 16px sans-serif;
+    line-height: 30px;
+    width: 0;
+    /* 动画过渡 */
+    transition: 0.4s;
+}
+.search-txt::placeholder{
+    color: #ffffff67;
+}
+.search-btn{
+    color: #fff;
+    float: right;
+    width: 3cap;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #a04c3b;
+    /* 弹性布局 水平垂直居中 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    /* 动画过渡 */
+    transition: 0.4s;
+}
+.search-box:hover .search-txt{
+    width: 200px;
+    padding: 0 6px;
+}
+.search-box:hover .search-btn{
+    background-color: #a04c3b;
+}

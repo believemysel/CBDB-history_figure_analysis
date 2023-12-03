@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Packed Bubble Chart from CSV</title>
+    <style>
+        /* 创建一个包含两个列的网格布局 */
+        .row {
+            display: flex; /* 使用flex布局 */
+            justify-content: space-between; /* 列之间平均分配空间 */
+        }
+
+        /* 左侧列的样式，宽度设置为50% */
+        .left-column {
+            width: 50%;
+            height: 93vh;
+            padding: 10px;
+            display: flex;
+            flex-direction: column; /* 使得内容垂直排列 */
+            justify-content: center; /* 在列中垂直居中内容 */
+            align-items: flex-start; /* 左对齐内容 */
+        }
+
+
+        /* 右侧列的样式，宽度设置为50% */
+        .right-column {
+            width: 50%;
+            height: 93vh;
+            padding: 10px;
+            border-left: 2px solid #95302e; /* Add a red left border */
+            /* 根据需要添加更多样式 */
+        }
+
+        .left-column h2 {
+            font-size: 45px; /* 设置左侧标题字体大小为28像素，根据需要进行调整 */
+            margin-bottom: 5px;
+        }
+
+        .left-column p {
+            font-size: 22px; /* 设置左侧标题字体大小为28像素，根据需要进行调整 */
+            text-align: left; /* 设置文本左对齐 */
+        }
+
+
+        .highcharts-figure, .highcharts-data-table table {
+            margin: 0 auto; /* 移除margin，因为布局是由flex控制 */
+        }
+
+        .highcharts-data-table table {
+            font-family: Verdana, sans-serif;
+            border-collapse: collapse;
+            border: 1px solid #EBEBEB;
+            margin: 10px auto;
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+        .highcharts-data-table caption {
+            padding: 1em 0;
+            font-size: 1.2em;
+            color: #555;
+        }
+        .highcharts-data-table th {
+            font-weight: 600;
+            padding: 0.5em;
+        }
+        .highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
+            padding: 0.5em;
+        }
+        .highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
+            background: #f8f8f8;
+        }
+        .highcharts-data-table tr:hover {
+            background: #f1f7ff;
+        }
+        #container {
+            margin-top: -10px;
+            height: 98vh;
+            border: 0px solid white; 
+        }
+        body {
+            background-color: transparent;
+            opacity: 1; /* 设置不透明度为 1 */
+        }
+
+
+    </style>
+</head>
+<body>
+    <!-- 创建两列布局的div -->
+    <div class="row">
+        <div class="left-column" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <h2 style="font-family: 'Xingkai', 'Xingkai SC', cursive;">唐朝人物姓氏图</h2>
+            <p style="font-family: 'Xingkai', 'Xingkai SC', cursive;">
+                本图以<span style="font-size: 35px; color: #95302e;font-weight: bold;">气泡图</span>形式展示唐代历史人物姓氏的数量分布。</span><br><br>
+                通过对唐朝人物的姓氏进行统计，找出数量排名<span style="font-size: 35px; color: #95302e;font-weight: bold;">前一百</span>的姓氏。每个气泡代表一个姓氏，其大小与该姓氏人数成正比，直观呈现了各姓氏的频率。<br><br>
+                其中，“<span style="font-size: 35px; color: #95302e;font-weight: bold;">李</span>”姓气泡最为突出，表明在唐朝“李”
+                姓是最为常见的姓氏之一，其人数相对较多。除此之外，还有一些其他常见的大姓氏，如
+                “<span style="font-size: 35px; color: #95302e;font-weight: bold;">王</span>”、
+                “<span style="font-size: 35px; color: #95302e;font-weight: bold;">張</span>”、“<span style="font-size: 35px; color: #95302e;font-weight: bold;">陳</span>”等，在唐朝社会也有着显著的存在。<br><br>
+                可以通过悬浮、拖拽的方式进行交互，将鼠标悬浮在气泡处，可以得到对应姓氏的数量。
+            </p>
+        </div>
+
+        <!-- 右侧列用于显示 Highcharts 图表 -->
+        <div class="right-column">
+            <figure class="highcharts-figure">
+                <div id="container"></div>
+            </figure>
+        </div>
+    </div>
+
+    <!-- 你的脚本代码 -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- ... 其他脚本文件 -->
+    <script>
+        $(document).ready(function() {
+            $.get('data/res.csv', function(data) {
+                // Parse CSV data
+                var lines = data.split('\n');
+                var dataPoints = [];
+
+                for (var i = 1; i < lines.length - 1; i++) {
+                    var parts = lines[i].split(',');
+                    var name = parts[0];
+                    var value = parseFloat(parts[1]);
+                    dataPoints.push({ name: name, value: value , z: value}); // 直接使用 value 属性
+                }
+    
+                // Select the top 30 data points
+                var top30DataPoints = dataPoints.slice(0, 100);
+    
+                // Map data to the format suitable for a packed bubble chart
+                var bubbleData = top30DataPoints.map(function(point) {
+                    return {
+                        name: point.name,
+                        value: point.value,
+                        z: value, // 确保 z 值与 value 值成正比
+                        origName: point.name // 存储原始名称以便恢复
+                    };
+                });
+
+                // 在处理数据点之前保存原始名称
+                var processedData = top30DataPoints.map(function(point) {
+                    return {
+                        name: point.name, // 原始名称
+                        y: point.value, // 实际值
+                        z: point.value*point.value, // 确保 z 值与 value 值成正比
+                        origName: point.name // 存储原始名称以便恢复
+                    };
+                });
+
+                // 创建压缩气泡图
+                Highcharts.chart('container', {
+                    chart: {
+                        type: 'packedbubble',
+                        height: '100%',
+                        backgroundColor: 'transparent', // Set chart background to transparent
+                    },
+                    title: {
+                        text: ''
+                    },
+                    tooltip: {
+                        enabled: false // 禁用鼠标悬浮提示框
+                    },
+                    legend: {
+                        enabled: false // 禁用图例
+                    },
+                    plotOptions: {
+                        packedbubble: {
+                            minSize: '30%',
+                            maxSize: '220%',
+                            layoutAlgorithm: {
+                                gravitationalConstant: 0.05,
+                                splitSeries: false,
+                                seriesInteraction: false,
+                                dragBetweenSeries: true,
+                                parentNodeLimit: true,
+                                initialPositions: 'random', // 初始位置设置为随机
+                                bubblePadding: 20 // 增加气泡之间的间距
+                            },
+                            point: {
+                                events: {
+                                    mouseOver: function() {
+                                        this.update({ name: this.y.toString() }, false);
+                                    },
+                                    mouseOut: function() {
+                                        // 使用 Highcharts 的内部方法直接设置点的名称，而不是使用 point.update
+                                        this.name = this.options.origName;
+                                        // 强制图表立即重绘
+                                        this.series.chart.redraw();
+                                    }
+
+                                }
+                            },
+                            dataLabels: {
+                                enabled: true,
+                                useHTML: true,
+                                formatter: function() {
+                                    // 计算气泡的半径，这是从面积转换而来
+                                    var radius = this.point.marker.radius;
+                                    // 字体大小与气泡半径成正比，您可以调系数以满足具体需求
+                                    var fontSize = Math.max(radius, 18); // 最小字体大小为18
+                                    var text = this.point.name;
+                                    // 检查文本是否为纯数字
+                                    var isNumber = /^\d+$/.test(text);
+                                    // 根据文本是否为数字来设置颜色
+                                    var color = isNumber ? 'black' : 'white'; // 数字标签为黑色，文本标签为白色
+                                    var fontWeight = 'bold'; // 所有标签都加粗
+                                    // 设置字体为行楷
+                                    var fontFamily = 'Xingkai, "Xingkai SC", cursive';
+                                    // 返回带有样式的标签
+                                    return `<span style="color:${color}; font-weight:${fontWeight} ;font-weight:${fontWeight} ; font-size:${fontSize}px;">${text}</span>`;
+                                },
+                                style: {
+                                    textOutline: 'none',
+                                    fontFamily: 'Xingkai, "Xingkai SC", cursive' // 这里也设置为行楷
+                                }
+                            },
+                            states: {
+                                hover: {
+                                    halo: {
+                                        size: 0 // 设置 halo 的大小为 0，以移除悬停效果
+                                    },
+                                    lineWidth: 0 // 可能需要添加这一行，以确保移除线宽
+                                }
+                            },
+                            // 确保没有为 marker 启用阴影
+                            marker: {
+                                fillOpacity: 1, // 设置填充不透明度为 1 以确保颜色固定
+                                lineWidth: 0, // 设置线宽为 0 可以去除边框线
+                                lineColor: null // 设置线条颜色为 null 可以确保没有边框
+                            }
+                        }
+                    },
+                    credits: {
+                            enabled: false // Add this line to remove the Highcharts.com branding
+                        },
+
+                    series: [{
+                        name: '',
+                        data: bubbleData,
+                        color: '#a04c3b' // 设置气泡颜色为红色
+                    }],
+                    responsive: {
+                        rules: [{
+                            condition: {
+                                maxHeight: 800 // Set the maximum height for responsiveness
+                            },
+                            chartOptions: {
+                                chart: {
+                                    height: '88%' // Adjust the height for smaller containers
+                                }
+                            }
+                        }]
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

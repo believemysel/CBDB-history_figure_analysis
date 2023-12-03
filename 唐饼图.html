@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="zh-CN" style="height: 100%">
+
+<head>
+    <meta charset="utf-8">
+    <title>2唐朝人物关系多维饼状图</title>
+    <style>
+        body {
+            background-image: url('assects/images/background.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    </style>
+</head>
+
+<body style="height: 100%; margin: 0">
+    <div id="left-text"
+        style="position: absolute; top: 50%; left: 2%; transform: translateY(-50%); font-size: 16px; color: black;font-family:  KaiTi, serif;">
+        <p>
+            <span style="font-size: 20px; color: #95302e;font-weight: bold;">唐朝人物关系多维饼状图：</span><br><br>
+            由内层到外层依次细化，<br><br>
+            从<span style="font-size: 18px; color: #95302e;font-weight: bold;">大类</span>，到<span style="font-size: 18px; color: #95302e;font-weight: bold;">子类</span>，再到<span style="font-size: 18px; color: #95302e;font-weight: bold;">具体条目</span>，<br><br>
+            可视化了数据库中收录的著作中<br><br>
+            提到的唐朝各类人物关系占比饼图。<br><br>
+        </p>
+    </div>
+    <div id="right-text"
+        style="position: absolute; top: 50%; right: 2%; transform: translateY(-50%); font-size: 16px; color: black;font-family:  KaiTi, serif;">
+        <p>
+            记录最多的是<span style="font-size: 18px; color: #95302e;font-weight: bold;">文字相关的综述类关系</span>，<br><br>
+            占到全部关系的<span style="font-size: 20px; color: #95302e;font-weight: bold;">60.42%</span>，<br><br>
+            说明唐朝的<span style="font-size: 18px; color: #95302e;font-weight: bold;">文学发展非常繁荣</span>；<br><br>
+            <span style="font-size: 18px; color: #95302e;font-weight: bold;">墓志文字</span>的占比之大说明<br><br>
+            <span style="font-size: 18px; color: #95302e;font-weight: bold;">碑文</span>是<span style="font-size: 18px; color: #95302e;font-weight: bold;">数据的重要来源</span>，<br><br>
+            同时<span style="font-size: 18px; color: #95302e;font-weight: bold;">朝代跨度大、动荡</span>，很多大家陨落；<br><br>
+            <span style="font-size: 20px; color: #95302e;font-weight: bold;">举荐</span>是入仕的重要手段，<br><br>
+            占到政治关系的<span style="font-size: 20px; color: #95302e;font-weight: bold;">40.48%</span>；<br><br>
+            唐朝友人间也常常书信往来，<br><br>
+            <span style="font-size: 18px; color: #95302e;font-weight: bold;">互相欣赏，争相模仿</span>,<br><br>
+            这种文艺交往关系占到学术关系的<span style="font-size: 20px; color: #95302e;font-weight: bold;">50%</span>；<br><br>
+            唐朝展现出了浓浓的<span style="font-size: 18px; color: #95302e;font-weight: bold;">以诗会友</span>氛围。<br><br>
+        </p>
+    </div>
+    <div id="container" style="height: 100%"></div>
+
+    <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+
+    <script type="text/javascript">
+        var dom = document.getElementById('container');
+        var myChart = echarts.init(dom, null, {
+            renderer: 'canvas',
+            useDirtyRect: false
+        });
+        var app = {};
+
+        var option;
+
+        option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: function (params) {
+                    return params.seriesName + '<br/>' + params.name + ': ' + ((params.value / 240) * 100).toFixed(2) + '%';
+                }
+
+            },
+            legend: {
+                show: false,
+                top: '5%',
+                left: 'center'
+            },
+            series: [
+                {
+                    name: '唐朝人物关系大类',
+                    type: 'pie',
+                    radius: ['18%', '37%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: true, // 显示标签
+                        position: 'inside', // 标签位置，可选值：'inside', 'outside', 'center'
+                        formatter: function (d) { return d.name; },
+                        fontSize: 9, // 标签字体大小
+                        //fontWeight: 'bold',
+                        color: '#fff' // 标签字体颜色
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            //position: 'inside',
+                            fontSize: 13,
+                            fontWeight: 'bold',
+                            //color: 'black'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        { value: 145, name: '综述关系类', itemStyle: { color: '#003460' } },
+                        { value: 42, name: '政治关系类', itemStyle: { color: '#4f794a' } },
+                        { value: 29, name: '朋友关系类', itemStyle: { color: '#8c5e67' } },
+                        { value: 16, name: '学术关系类', itemStyle: { color: '#bf9c46' } },
+                        { value: 4, name: '军事关系类', itemStyle: { color: '#95302e' } },
+                        { value: 3, name: '社会关系类', itemStyle: { color: '#206864' } },
+                        { value: 1, name: '家庭关系类', itemStyle: { color: '#d08635' } },
+                    ]
+                },
+
+                {
+                    name: '唐朝人物关系子类',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: true, // 显示标签
+                        position: 'inside', // 标签位置，可选值：'inside', 'outside', 'center'
+                        formatter: function (d) { return d.name; },
+                        fontSize: 12, // 标签字体大小
+                        fontWeight: '', // 标签字体粗细
+                        color: '#fff', // 标签字体颜色
+                        rotate: 'auto' // 添加rotate属性
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: 17,
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        { value: 102, name: '墓志文字', itemStyle: { color: '#003d74' } },
+                        { value: 30, name: '应酬文字', itemStyle: { color: '#3271ae' } },
+                        { value: 8, name: '序跋文字', itemStyle: { color: '#5976ba' } },
+                        { value: 2, name: '传记文字', itemStyle: { color: '#6f94cd' } },
+                        { value: 2, name: '书札文字', itemStyle: { color: '#8aabcc' } },
+                        { value: 1, name: '论说文字', itemStyle: { color: '#88abda' } },
+                        { value: 17, name: '入仕举荐', itemStyle: { color: '#5d8351' } },
+                        { value: 10, name: '政治奥援', itemStyle: { color: '#6a8d52' } },
+                        { value: 10, name: '政治对抗', itemStyle: { color: '#81a380' } },
+                        { value: 5, name: '官场关系', itemStyle: { color: '#a8bf8f' } },
+                        { value: 29, name: '朋友关系', itemStyle: { color: '#ac7c89' } },
+                        { value: 8, name: '文艺交往', itemStyle: { color: '#d6bc46' } },
+                        { value: 4, name: '同僚', itemStyle: { color: '#d6c560' } },
+                        { value: 3, name: '学术交往', itemStyle: { color: '#e1d384' } },
+                        { value: 1, name: '师生关系', itemStyle: { color: '#ead89a' } },
+                        { value: 4, name: '军事对抗', itemStyle: { color: '#ba5b49' } },
+                        { value: 3, name: '社会关系', itemStyle: { color: '#5da39d' } },
+                        { value: 1, name: '家庭关系', itemStyle: { color: '#d2a36c' } },
+                    ]
+                },
+
+                {
+                    name: '唐朝人物关系具体条目',
+                    type: 'pie',
+                    radius: ['75%', '78%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: true, // 显示标签
+                        position: 'outside', // 标签位置，可选值：'inside', 'outside', 'center'
+                        padding: [0, -15, 0, -15], // 设置padding属性
+                        formatter: function (d) { return d.name; },
+                        fontSize: 8, // 标签字体大小
+                        color: 'auto', // 标签字体颜色
+                        rotate: 'radial', // 添加rotate属性
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: 16,
+                            fontWeight: 'bold',
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        { value: 101, name: '墓志铭由某人所作', itemStyle: { color: '#003d74' } },
+                        { value: 1, name: '墓志铭为某人所作', itemStyle: { color: '#003d74' } },
+                        { value: 26, name: '相互唱和', itemStyle: { color: '#3271ae' } },
+                        { value: 4, name: '收到某人的诗文', itemStyle: { color: '#3271ae' } },
+                        { value: 4, name: '为某人的书作序', itemStyle: { color: '#5976ba' } },
+                        { value: 2, name: '书跋由某人所作', itemStyle: { color: '#5976ba' } },
+                        { value: 2, name: '书之题词由某人所作', itemStyle: { color: '#5976ba' } },
+                        { value: 2, name: '传记作者为某人', itemStyle: { color: '#6f94cd' } },
+                        { value: 2, name: '收到某人的答书', itemStyle: { color: '#8aabcc' } },
+                        { value: 1, name: '字说、名述由某人所作', itemStyle: { color: '#88abda' } },
+                        { value: 17, name: '被某人举荐', itemStyle: { color: '#5d8351' } },
+                        { value: 4, name: '是某人的恩主', itemStyle: { color: '#6a8d52' } },
+                        { value: 3, name: '被某人欣赏/器重', itemStyle: { color: '#6a8d52' } },
+                        { value: 3, name: '青睐/喜爱', itemStyle: { color: '#6a8d52' } },
+                        { value: 4, name: '根据某人命令被处决', itemStyle: { color: '#81a380' } },
+                        { value: 2, name: '忌/恶', itemStyle: { color: '#81a380' } },
+                        { value: 2, name: '被某人(或别人的追随者)杀害', itemStyle: { color: '#81a380' } },
+                        { value: 1, name: '被某人弹劾', itemStyle: { color: '#81a380' } },
+                        { value: 1, name: '遭到某人的反对或攻讦', itemStyle: { color: '#81a380' } },
+                        { value: 3, name: '部将为某人', itemStyle: { color: '#a8bf8f' } },
+                        { value: 2, name: '辟', itemStyle: { color: '#a8bf8f' } },
+                        { value: 21, name: '朋友', itemStyle: { color: '#ac7c89' } },
+                        { value: 8, name: '相识', itemStyle: { color: '#ac7c89' } },
+                        { value: 4, name: '诗作被某人称道', itemStyle: { color: '#d6bc46' } },
+                        { value: 3, name: '书风被某人模仿', itemStyle: { color: '#d6bc46' } },
+                        { value: 1, name: '编辑某人诗文', itemStyle: { color: '#d6bc46' } },
+                        { value: 4, name: '同年友', itemStyle: { color: '#d6c560' } },
+                        { value: 2, name: '合编著作', itemStyle: { color: '#e1d384' } },
+                        { value: 1, name: '赞扬某人之学', itemStyle: { color: '#e1d384' } },
+                        { value: 1, name: '为某人学生', itemStyle: { color: '#ead89a' } },
+                        { value: 3, name: '被抵御/讨平', itemStyle: { color: '#ba5b49' } },
+                        { value: 1, name: '投降于某人', itemStyle: { color: '#ba5b49' } },
+                        { value: 2, name: '未详', itemStyle: { color: '#5da39d' } },
+                        { value: 1, name: '为某人之婢', itemStyle: { color: '#5da39d' } },
+                        { value: 1, name: '被某人养育', itemStyle: { color: '#d2a36c' } },
+
+                    ]
+                }
+            ]
+        };
+
+
+
+
+        // 监听点击事件
+        myChart.on('click', function (params) {
+            // 根据点击的饼块数据params，更新新的option对象
+            if (params.name === '综述关系类') {
+                var newOption = {
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params) {
+                            return params.seriesName + '<br/>' + params.name + ': ' + ((params.value / 145) * 100).toFixed(2) + '%';
+                        }
+
+                    },
+                    legend: {
+                        show: false,
+                        top: '5%',
+                        left: 'center'
+                    },
+                    series: [
+                        {
+                            name: '唐朝人物关系大类',
+                            type: 'pie',
+                            radius: ['18%', '37%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: true, // 显示标签
+                                position: 'inside', // 标签位置，可选值：'inside', 'outside', 'center'
+                                formatter: function (d) { return d.name; },
+                                fontSize: 9, // 标签字体大小
+                                //fontWeight: 'bold',
+                                color: '#fff' // 标签字体颜色
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    //position: 'inside',
+                                    fontSize: 13,
+                                    fontWeight: 'bold',
+                                    //color: 'black'
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: 145, name: '综述关系类', itemStyle: { color: '#003460' } },
+                            ]
+                        },
+
+                        {
+                            name: '唐朝人物关系子类',
+                            type: 'pie',
+                            radius: ['40%', '70%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: true, // 显示标签
+                                position: 'inside', // 标签位置，可选值：'inside', 'outside', 'center'
+                                formatter: function (d) { return d.name; },
+                                fontSize: 12, // 标签字体大小
+                                fontWeight: '', // 标签字体粗细
+                                color: '#fff', // 标签字体颜色
+                                rotate: 'auto' // 添加rotate属性
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: 17,
+                                    fontWeight: 'bold'
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: 102, name: '墓志文字', itemStyle: { color: '#003d74' } },
+                                { value: 30, name: '应酬文字', itemStyle: { color: '#3271ae' } },
+                                { value: 8, name: '序跋文字', itemStyle: { color: '#5976ba' } },
+                                { value: 2, name: '传记文字', itemStyle: { color: '#6f94cd' } },
+                                { value: 2, name: '书札文字', itemStyle: { color: '#8aabcc' } },
+                                { value: 1, name: '论说文字', itemStyle: { color: '#88abda' } },
+                            ]
+                        },
+
+                        {
+                            name: '唐朝人物关系具体条目',
+                            type: 'pie',
+                            radius: ['75%', '78%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: true, // 显示标签
+                                position: 'outside', // 标签位置，可选值：'inside', 'outside', 'center'
+                                padding: [0, -15, 0, -15], // 设置padding属性
+                                formatter: function (d) { return d.name; },
+                                fontSize: 8, // 标签字体大小
+                                color: 'auto', // 标签字体颜色
+                                rotate: 'radial', // 添加rotate属性
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: 16,
+                                    fontWeight: 'bold',
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: 101, name: '墓志铭由某人所作', itemStyle: { color: '#003d74' } },
+                                { value: 1, name: '墓志铭为某人所作', itemStyle: { color: '#003d74' } },
+                                { value: 26, name: '相互唱和', itemStyle: { color: '#3271ae' } },
+                                { value: 4, name: '收到某人的诗文', itemStyle: { color: '#3271ae' } },
+                                { value: 4, name: '为某人的书作序', itemStyle: { color: '#5976ba' } },
+                                { value: 2, name: '书跋由某人所作', itemStyle: { color: '#5976ba' } },
+                                { value: 2, name: '书之题词由某人所作', itemStyle: { color: '#5976ba' } },
+                                { value: 2, name: '传记作者为某人', itemStyle: { color: '#6f94cd' } },
+                                { value: 2, name: '收到某人的答书', itemStyle: { color: '#8aabcc' } },
+                                { value: 1, name: '字说、名述由某人所作', itemStyle: { color: '#88abda' } },
+                            ]
+                        }
+                    ]
+                };
+                // 重新渲染图表
+                myChart.setOption(newOption);
+            }
+
+            if (params.name === '政治关系类') {
+                var newOption = {
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params) {
+                            return params.seriesName + '<br/>' + params.name + ': ' + ((params.value / 42) * 100).toFixed(2) + '%';
+                        }
+
+                    },
+                    legend: {
+                        show: false,
+                        top: '5%',
+                        left: 'center'
+                    },
+                    series: [
+                        {
+                            name: '唐朝人物关系大类',
+                            type: 'pie',
+                            radius: ['18%', '37%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: true, // 显示标签
+                                position: 'inside', // 标签位置，可选值：'inside', 'outside', 'center'
+                                formatter: function (d) { return d.name; },
+                                fontSize: 9, // 标签字体大小
+                                //fontWeight: 'bold',
+                                color: '#fff' // 标签字体颜色
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    //position: 'inside',
+                                    fontSize: 13,
+                                    fontWeight: 'bold',
+                                    //color: 'black'
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: 42, name: '政治关系类', itemStyle: { color: '#4f794a' } },
+                            ]
+                        },
+
+                        {
+                            name: '唐朝人物关系子类',
+                            type: 'pie',
+                            radius: ['40%', '70%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: true, // 显示标签
+                                position: 'inside', // 标签位置，可选值：'inside', 'outside', 'center'
+                                formatter: function (d) { return d.name; },
+                                fontSize: 12, // 标签字体大小
+                                fontWeight: '', // 标签字体粗细
+                                color: '#fff', // 标签字体颜色
+                                rotate: 'auto' // 添加rotate属性
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: 17,
+                                    fontWeight: 'bold'
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: 17, name: '入仕举荐', itemStyle: { color: '#5d8351' } },
+                                { value: 10, name: '政治奥援', itemStyle: { color: '#6a8d52' } },
+                                { value: 10, name: '政治对抗', itemStyle: { color: '#81a380' } },
+                                { value: 5, name: '官场关系', itemStyle: { color: '#a8bf8f' } },
+                            ]
+                        },
+
+                        {
+                            name: '唐朝人物关系具体条目',
+                            type: 'pie',
+                            radius: ['75%', '78%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: true, // 显示标签
+                                position: 'outside', // 标签位置，可选值：'inside', 'outside', 'center'
+                                padding: [0, -15, 0, -15], // 设置padding属性
+                                formatter: function (d) { return d.name; },
+                                fontSize: 8, // 标签字体大小
+                                color: 'auto', // 标签字体颜色
+                                rotate: 'radial', // 添加rotate属性
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: 16,
+                                    fontWeight: 'bold',
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: 17, name: '被某人举荐', itemStyle: { color: '#5d8351' } },
+                                { value: 4, name: '是某人的恩主', itemStyle: { color: '#6a8d52' } },
+                                { value: 3, name: '被某人欣赏/器重', itemStyle: { color: '#6a8d52' } },
+                                { value: 3, name: '青睐/喜爱', itemStyle: { color: '#6a8d52' } },
+                                { value: 4, name: '根据某人命令被处决', itemStyle: { color: '#81a380' } },
+                                { value: 2, name: '忌/恶', itemStyle: { color: '#81a380' } },
+                                { value: 2, name: '被某人(或别人的追随者)杀害', itemStyle: { color: '#81a380' } },
+                                { value: 1, name: '被某人弹劾', itemStyle: { color: '#81a380' } },
+                                { value: 1, name: '遭到某人的反对或攻讦', itemStyle: { color: '#81a380' } },
+                                { value: 3, name: '部将为某人', itemStyle: { color: '#a8bf8f' } },
+                                { value: 2, name: '辟', itemStyle: { color: '#a8bf8f' } },
+
+                            ]
+                        }
+                    ]
+                };
+                myChart.setOption(newOption);
+            }
+
+
+
+            if (params.name === '朋友关系类') {
+                var newOption = {
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params) {
+                            return params.seriesName + '<br/>' + params.name + ': ' + ((params.value / 29) * 100).toFixed(2) + '%';
+                        }
+
+                    },
+                    legend: {
+                        show: false,
+                        top: '5%',
+                        left: 'center'
+                    },
+                    series: [
+                        {
+                            name: '唐朝人物关系大类',
+                            type: 'pie',
+                            radius: ['18%', '37%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: true, // 显示标签
+                                position: 'inside', // 标签位置，可选值：'inside', 'outside', 'center'
+                                formatter: function (d) { return d.name; },
+                                fontSize: 9, // 标签字体大小
+                                //fontWeight: 'bold',
+                                color: '#fff' // 标签字体颜色
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    //position: 'inside',
+                                    fontSize: 13,
+                                    fontWeight: 'bold',
+                                    //color: 'black'
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: 29, name: '朋友关系类', itemStyle: { color: '#8c5e67' } },
+                            ]
+                        },
+
+                        {
+                            name: '唐朝人物关系子类',
+                            type: 'pie',
+                            radius: ['40%', '70%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: true, // 显示标签
+                                position: 'inside', // 标签位置，可选值：'inside', 'outside', 'center'
+                                formatter: function (d) { return d.name; },
+                                fontSize: 12, // 标签字体大小
+                                fontWeight: '', // 标签字体粗细
+                                color: '#fff', // 标签字体颜色
+                                rotate: 'auto' // 添加rotate属性
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: 17,
+                                    fontWeight: 'bold'
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: 29, name: '朋友关系', itemStyle: { color: '#ac7c89' } },
+                            ]
+                        },
+
+                        {
+                            name: '唐朝人物关系具体条目',
+                            type: 'pie',
+                            radius: ['75%', '78%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: true, // 显示标签
+                                position: 'outside', // 标签位置，可选值：'inside', 'outside', 'center'
+                                padding: [0, -15, 0, -15], // 设置padding属性
+                                formatter: function (d) { return d.name; },
+                                fontSize: 8, // 标签字体大小
+                                color: 'auto', // 标签字体颜色
+                                rotate: 'radial', // 添加rotate属性
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: 16,
+                                    fontWeight: 'bold',
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: 21, name: '朋友', itemStyle: { color: '#ac7c89' } },
+                                { value: 8, name: '相识', itemStyle: { color: '#ac7c89' } },
+                            ]
+                        }
+                    ]
+                };
+                myChart.setOption(newOption);
+            }
+
+
+            if (params.name === '学术关系类') {
+                var newOption = {
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params) {
+                            return params.seriesName + '<br/>' + params.name + ': ' + ((params.value / 16) * 100).toFixed(2) + '%';
+                        }
+
+                    },
+                    legend: {
+                        show: false,
+                        top: '5%',
+                        left: 'center'
+                    },
+                    series: [
+                        {
+                            name: '唐朝人物关系大类',
+                            type: 'pie',
+                            radius: ['18%', '37%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: true, // 显示标签
+                                position: 'inside', // 标签位置，可选值：'inside', 'outside', 'center'
+                                formatter: function (d) { return d.name; },
+                                fontSize: 9, // 标签字体大小
+                                //fontWeight: 'bold',
+                                color: '#fff' // 标签字体颜色
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    //position: 'inside',
+                                    fontSize: 13,
+                                    fontWeight: 'bold',
+                                    //color: 'black'
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: 16, name: '学术关系类', itemStyle: { color: '#bf9c46' } },
+                            ]
+                        },
+
+                        {
+                            name: '唐朝人物关系子类',
+                            type: 'pie',
+                            radius: ['40%', '70%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: true, // 显示标签
+                                position: 'inside', // 标签位置，可选值：'inside', 'outside', 'center'
+                                formatter: function (d) { return d.name; },
+                                fontSize: 12, // 标签字体大小
+                                fontWeight: '', // 标签字体粗细
+                                color: '#fff', // 标签字体颜色
+                                rotate: 'auto' // 添加rotate属性
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: 17,
+                                    fontWeight: 'bold'
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: 8, name: '文艺交往', itemStyle: { color: '#d6bc46' } },
+                                { value: 4, name: '同僚', itemStyle: { color: '#d6c560' } },
+                                { value: 3, name: '学术交往', itemStyle: { color: '#e1d384' } },
+                                { value: 1, name: '师生关系', itemStyle: { color: '#ead89a' } },
+                            ]
+                        },
+
+                        {
+                            name: '唐朝人物关系具体条目',
+                            type: 'pie',
+                            radius: ['75%', '78%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: true, // 显示标签
+                                position: 'outside', // 标签位置，可选值：'inside', 'outside', 'center'
+                                padding: [0, -15, 0, -15], // 设置padding属性
+                                formatter: function (d) { return d.name; },
+                                fontSize: 8, // 标签字体大小
+                                color: 'auto', // 标签字体颜色
+                                rotate: 'radial', // 添加rotate属性
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: 16,
+                                    fontWeight: 'bold',
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: 4, name: '诗作被某人称道', itemStyle: { color: '#d6bc46' } },
+                                { value: 3, name: '书风被某人模仿', itemStyle: { color: '#d6bc46' } },
+                                { value: 1, name: '编辑某人诗文', itemStyle: { color: '#d6bc46' } },
+                                { value: 4, name: '同年友', itemStyle: { color: '#d6c560' } },
+                                { value: 2, name: '合编著作', itemStyle: { color: '#e1d384' } },
+                                { value: 1, name: '赞扬某人之学', itemStyle: { color: '#e1d384' } },
+                                { value: 1, name: '为某人学生', itemStyle: { color: '#ead89a' } },
+                            ]
+                        }
+                    ]
+                }
+                myChart.setOption(newOption);
+            }
+
+
+            if (params.name === '军事关系类') {
+                var newOption = {
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params) {
+                            return params.seriesName + '<br/>' + params.name + ': ' + ((params.value / 4) * 100).toFixed(2) + '%';
+                        }
+
+                    },
+                    legend: {
+                        show: false,
+                        top: '5%',
+                        left: 'center'
+                    },
+                    series: [
+                        {
+                            name: '唐朝人物关系大类',
+                            type: 'pie',
+                            radius: ['18%', '37%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: true, // 显示标签
+                                position: 'inside', // 标签位置，可选值：'inside', 'outside', 'center'
+                                formatter: function (d) { return d.name; },
+                                fontSize: 9, // 标签字体大小
+                                //fontWeight: 'bold',
+                                color: '#fff' // 标签字体颜色
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    //position: 'inside',
+                                    fontSize: 13,
+                                    fontWeight: 'bold',
+                                    //color: 'black'
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: 4, name: '军事关系类', itemStyle: { color: '#95302e' } },
+                            ]
+                        },
+
+                        {
+                            name: '唐朝人物关系子类',
+                            type: 'pie',
+                            radius: ['40%', '70%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: true, // 显示标签
+                                position: 'inside', // 标签位置，可选值：'inside', 'outside', 'center'
+                                formatter: function (d) { return d.name; },
+                                fontSize: 12, // 标签字体大小
+                                fontWeight: '', // 标签字体粗细
+                                color: '#fff', // 标签字体颜色
+                                rotate: 'auto' // 添加rotate属性
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: 17,
+                                    fontWeight: 'bold'
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: 4, name: '军事对抗', itemStyle: { color: '#ba5b49' } },
+                            ]
+                        },
+
+                        {
+                            name: '唐朝人物关系具体条目',
+                            type: 'pie',
+                            radius: ['75%', '78%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: true, // 显示标签
+                                position: 'outside', // 标签位置，可选值：'inside', 'outside', 'center'
+                                padding: [0, -15, 0, -15], // 设置padding属性
+                                formatter: function (d) { return d.name; },
+                                fontSize: 8, // 标签字体大小
+                                color: 'auto', // 标签字体颜色
+                                rotate: 'radial', // 添加rotate属性
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: 16,
+                                    fontWeight: 'bold',
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: 3, name: '被抵御/讨平', itemStyle: { color: '#ba5b49' } },
+                                { value: 1, name: '投降于某人', itemStyle: { color: '#ba5b49' } },
+                            ]
+                        }
+                    ]
+                };
+                myChart.setOption(newOption);
+            }
+
+
+            if (params.name === '社会关系类') {
+                var newOption = {
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params) {
+                            return params.seriesName + '<br/>' + params.name + ': ' + ((params.value / 3) * 100).toFixed(2) + '%';
+                        }
+
+                    },
+                    legend: {
+                        show: false,
+                        top: '5%',
+                        left: 'center'
+                    },
+                    series: [
+                        {
+                            name: '唐朝人物关系大类',
+                            type: 'pie',
+                            radius: ['18%', '37%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: true, // 显示标签
+                                position: 'inside', // 标签位置，可选值：'inside', 'outside', 'center'
+                                formatter: function (d) { return d.name; },
+                                fontSize: 9, // 标签字体大小
+                                //fontWeight: 'bold',
+                                color: '#fff' // 标签字体颜色
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    //position: 'inside',
+                                    fontSize: 13,
+                                    fontWeight: 'bold',
+                                    //color: 'black'
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: 3, name: '社会关系类', itemStyle: { color: '#206864' } },
+                            ]
+                        },
+
+                        {
+                            name: '唐朝人物关系子类',
+                            type: 'pie',
+                            radius: ['40%', '70%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: true, // 显示标签
+                                position: 'inside', // 标签位置，可选值：'inside', 'outside', 'center'
+                                formatter: function (d) { return d.name; },
+                                fontSize: 12, // 标签字体大小
+                                fontWeight: '', // 标签字体粗细
+                                color: '#fff', // 标签字体颜色
+                                rotate: 'auto' // 添加rotate属性
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: 17,
+                                    fontWeight: 'bold'
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: 3, name: '社会关系', itemStyle: { color: '#5da39d' } },
+                            ]
+                        },
+
+                        {
+                            name: '唐朝人物关系具体条目',
+                            type: 'pie',
+                            radius: ['75%', '78%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: true, // 显示标签
+                                position: 'outside', // 标签位置，可选值：'inside', 'outside', 'center'
+                                padding: [0, -15, 0, -15], // 设置padding属性
+                                formatter: function (d) { return d.name; },
+                                fontSize: 8, // 标签字体大小
+                                color: 'auto', // 标签字体颜色
+                                rotate: 'radial', // 添加rotate属性
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: 16,
+                                    fontWeight: 'bold',
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: 2, name: '未详', itemStyle: { color: '#5da39d' } },
+                                { value: 1, name: '为某人之婢', itemStyle: { color: '#5da39d' } },
+                            ]
+                        }
+                    ]
+                };
+                myChart.setOption(newOption);
+            }
+
+
+            if (params.name === '家庭关系类') {
+                var newOption = {
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params) {
+                            return params.seriesName + '<br/>' + params.name + ': ' + ((params.value / 1) * 100).toFixed(2) + '%';
+                        }
+
+                    },
+                    legend: {
+                        show: false,
+                        top: '5%',
+                        left: 'center'
+                    },
+                    series: [
+                        {
+                            name: '唐朝人物关系大类',
+                            type: 'pie',
+                            radius: ['18%', '37%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: true, // 显示标签
+                                position: 'inside', // 标签位置，可选值：'inside', 'outside', 'center'
+                                formatter: function (d) { return d.name; },
+                                fontSize: 9, // 标签字体大小
+                                //fontWeight: 'bold',
+                                color: '#fff' // 标签字体颜色
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    //position: 'inside',
+                                    fontSize: 13,
+                                    fontWeight: 'bold',
+                                    //color: 'black'
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: 1, name: '家庭关系类', itemStyle: { color: '#d08635' } },
+                            ]
+                        },
+
+                        {
+                            name: '唐朝人物关系子类',
+                            type: 'pie',
+                            radius: ['40%', '70%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: true, // 显示标签
+                                position: 'inside', // 标签位置，可选值：'inside', 'outside', 'center'
+                                formatter: function (d) { return d.name; },
+                                fontSize: 12, // 标签字体大小
+                                fontWeight: '', // 标签字体粗细
+                                color: '#fff', // 标签字体颜色
+                                rotate: 'auto' // 添加rotate属性
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: 17,
+                                    fontWeight: 'bold'
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: 1, name: '家庭关系', itemStyle: { color: '#d2a36c' } },
+                            ]
+                        },
+
+                        {
+                            name: '唐朝人物关系具体条目',
+                            type: 'pie',
+                            radius: ['75%', '78%'],
+                            avoidLabelOverlap: false,
+                            itemStyle: {
+                                borderRadius: 10,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            },
+                            label: {
+                                show: true, // 显示标签
+                                position: 'outside', // 标签位置，可选值：'inside', 'outside', 'center'
+                                padding: [0, -15, 0, -15], // 设置padding属性
+                                formatter: function (d) { return d.name; },
+                                fontSize: 8, // 标签字体大小
+                                color: 'auto', // 标签字体颜色
+                                rotate: 'radial', // 添加rotate属性
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: 16,
+                                    fontWeight: 'bold',
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                { value: 1, name: '被某人养育', itemStyle: { color: '#d2a36c' } },
+                            ]
+                        }
+                    ]
+                };
+                myChart.setOption(newOption);
+            }
+        }
+        );
+        myChart.on('dblclick', function (params) { myChart.setOption(option); })
+
+        myChart.setOption(option);
+        window.addEventListener('resize', myChart.resize);
+    </script>
+</body>
+
+</html>

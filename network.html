@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<head>
+    <meta charset = "utf-8"/>
+    <script type = "text/javascript" src = "./assects/js/d3/d3.v4.js"></script>
+    <script type = "text/javascript" src = "./assects/js/jquery/jquery-1.9.1.js"></script>
+    <link rel = "stylesheet" href = "./assects/css/demo.css"/>
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<html>
+    <body>
+        <div class="net">
+            <div class="say">
+                <p style="font-family: KaiTi,serif;font-size: 16px;">
+                    <span style="font-size: 30px; color: black;font-weight: bold;">唐朝著名诗人关系网：</span><br><br>
+                    依据唐朝著名诗人之间的关系，绘制如图关系网络。通过<span style="color: #95302e; font-weight: bold; font-size: 20px;">箭头</span>指示表明人物关系，并辅助<span style="color: #95302e; font-weight: bold; font-size: 20px;">关系文字</span>标注。<br><br>
+                    其中，为了使关系网络显示更加清晰，尽量减少文字重叠，多次出现的<span style="color: #007175; font-weight: bold; font-size: 20px;">“好友”</span>关系隐去了文字标注，并以<span style="color: #007175; font-weight: bold; font-size: 20px;">绿色连接线</span>以作显示区分。<br><br>
+                    拖动空白处可以调整关系图位置，滑动鼠标滚轮可以调整关系图显示大小。<span style="color: #95302e; font-weight: bold; font-size: 20px;">拖动</span>对应诗人头像，可以<span style="color: #95302e; font-weight: bold; font-size: 20px;">移动对应节点</span>。<br><br>
+                    <span style="color: #95302e; font-weight: bold; font-size: 20px;">鼠标悬浮</span>至对应诗人头像，可以<span style="color: #95302e; font-weight: bold; font-size: 20px;">查看诗人详情信息</span>。<span style="color: #95302e; font-weight: bold; font-size: 20px;">鼠标双击</span>对应诗人头像，该诗人相关关系网络就会<span style="color: #95302e; font-weight: bold; font-size: 20px;">高亮显示</span>。<br><br>
+                    在搜索框<span style="color: #95302e; font-weight: bold; font-size: 20px;">搜索</span>对应诗人姓名，相关关系网络同样也会<span style="color: #95302e; font-weight: bold; font-size: 20px;">高亮显示</span>。<br><br>
+                    <span style="color: #95302e; font-weight: bold; font-size: 20px;">双击任意空白区域</span>，关系图就会<span style="color: #95302e; font-weight: bold; font-size: 20px;">复原</span>。<br><br>
+                </p>
+            </div>
+            <div class="network">
+                <div class="search-box">
+                    <input type="text" id="searchBox" class="search-txt" placeholder="name?" />
+                    <a class="search-btn">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="./assects/js/network.js"></script>
+</html>
+
+
