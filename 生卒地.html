@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            display: flex;
+            background: url(./assects/images/background.jpg) center;
+        }
+        svg {
+            font: 10px sans-serif;
+            display: block;
+            margin:0 auto;
+        }
+
+        .axis path, .axis line {
+            fill: none;
+            stroke: none;
+            shape-rendering: crispEdges;
+        }
+
+        #chart {
+            width: 60%;
+            height: 92vh;
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
+        
+        .say{
+            width: 30%;
+            height: 92vh;
+            border-left: 2px solid #95302e;
+            margin: 12px auto;
+            padding-left: 20px;
+            text-align: center;
+        }
+
+        h2{
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 0;
+        }
+
+        .node rect {
+            cursor: move;
+            fill-opacity: .9;
+            shape-rendering: crispEdges;
+        }
+
+        .node text {
+            pointer-events: none;
+            opacity: .5;
+            font-weight: bold;
+            font-family: KaiTi, serif;
+        }
+
+        #tooltip {
+            position: absolute;
+            text-align: center;
+            width: auto;
+            height: auto;
+            padding: 2px;
+            background: #13393E;
+            color: #F2CCA6;
+            font-size: 14px;
+            font-family: KaiTi, serif;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        .link {
+            fill: none;
+            stroke: #000;
+            stroke-opacity: .06;
+
+        }
+
+        .link:hover {
+            stroke-opacity: .18;
+        }
+    </style>
+</head>
+<body>
+    <body>
+        <div id="chart"></div>
+        <div id="tooltip"></div>
+        <div class="say">
+            <h2 style="font-size: 35px; color: black ;font-family: KaiTi; font-weight: bold;text-align: center;">唐代生卒地变迁图</h2>
+            <p style="font-family: KaiTi,serif;font-size: 22px;">
+                色块<span style="color: #95302e; font-weight: bold; font-size: 24px;">从左到右</span>分别表示<span style="color: #95302e; font-weight: bold; font-size: 24px;">出生地</span>、<span style="color: #95302e; font-weight: bold; font-size: 24px;">出生地所属道</span>（高级别行政单位）、<span style="color: #95302e; font-weight: bold; font-size: 24px;">死亡地所属道</span>、<span style="color: #95302e; font-weight: bold; font-size: 24px;">死亡地</span>。<br><br>
+                <span style="color: #95302e; font-weight: bold; font-size: 24px;">"其它"</span>表示在数据库中出现次数不大于2的地名集合。<br><br>
+                <span style="color: #95302e; font-weight: bold; font-size: 24px;">生卒信息</span>，包括<span style="font-weight: bold;">出生地</span>（若无则用籍贯、祖籍、落籍、本惯、出生地代替）、<span style="font-weight: bold;">死亡地</span>（若无则用葬地代替）。<br><br>
+                <span style="color: #95302e; font-weight: bold; font-size: 24px;">鼠标悬浮</span>至对应节点和连接线，可以查看具体值。<span style="color: #95302e; font-weight: bold; font-size: 24px;">鼠标拖动</span>对应节点，可以调整其位置。
+            </p>
+        </div>
+    </body>
+    <script src="./assects/js/d3/d3.v3.min.js"></script>
+    <script src="https://bost.ocks.org/mike/sankey/sankey.js"></script>
+    <script>
+        var json = {
+        "nodes": [
+            {
+                "name": "洛阳"
+            },
+            {
+                "name": "陇西"
+            },
+            {
+                "name": "狄道"
+            },
+            {
+                "name": "天水郡"
+            },
+            {
+                "name": "缑氏"
+            },
+            {
+                "name": "平昌"
+            },
+            {
+                "name": "渤海"
+            },
+            {
+                "name": "彭城"
+            },
+            {
+                "name": "虢州"
+            },
+            {
+                "name": "开封"
+            },
+            {
+                "name": "临沂"
+            },
+            {
+                "name": "荣阳"
+            },
+            {
+                "name": "沛县"
+            },
+            {
+                "name": "平原"
+            },
+            {
+                "name": "谯县"
+            },
+            {
+                "name": "濮阳"
+            },
+            {
+                "name": "汝南"
+            },
+            {
+                "name": "荣泽"
+            },
+            {
+                "name": "其它"
+            },
+            {
+                "name": "范阳"
+            },
+            {
+                "name": "清河"
+            },
+            {
+                "name": "安平"
+            },
+            {
+                "name": "博平"
+            },
+            {
+                "name": "河内"
+            },
+            {
+                "name": "赞皇"
+            },
+            {
+                "name": "北平"
+            },
+            {
+                "name": "昌平"
+            },
+            {
+                "name": "广平"
+            },
+            {
+                "name": "上谷郡"
+            },
+            {
+                "name": "河间"
+            },
+            {
+                "name": "魏州"
+            },
+            {
+                "name": "相州"
+            },
+            {
+                "name": "中山"
+            },
+            {
+                "name": "南阳"
+            },
+            {
+                "name": "方城"
+            },
+            {
+                "name": "襄阳"
+            },
+            {
+                "name": "湖州"
+            },
+            {
+                "name": "河中府"
+            },
+            {
+                "name": "太原"
+            },
+            {
+                "name": "闻喜"
+            },
+            {
+                "name": "晋阳"
+            },
+            {
+                "name": "涉县"
+            },
+            {
+                "name": "太谷"
+            },
+            {
+                "name": "长安"
+            },
+            {
+                "name": "万年"
+            },
+            {
+                "name": "华阴"
+            },
+            {
+                "name": "白水"
+            },
+            {
+                "name": "扶风"
+            },
+            {
+                "name": "冯翊"
+            },
+            {
+                "name": "杜陵"
+            },
+            {
+                "name": "琅琊"
+            },
+            {
+                "name": "吴县"
+            },
+            {
+                "name": "常山"
+            },
+            {
+                "name": "会稽"
+            },
+            {
+                "name": "江都"
+            },
+            {
+                "name": "都畿道"
+            },                    
+            {
+                "name": "陇右道"
+            },
+            {
+                "name": "山南西道"
+            },
+            {
+                "name": "河南道"
+            },
+            {
+                "name": "河北道"
+            },
+            {
+                "name": "剑南道"
+            },
+            {
+                "name": "江南道"
+            },
+            {
+                "name": "山南东道"
+            },
+            {
+                "name": "河东道"
+            },
+            {
+                "name": "江南西道"
+            },
+            {
+                "name": "江南东道"
+            },
+            {
+                "name": "关内道"
+            },
+            {
+                "name": "淮南道"
+            },
+            {
+                "name": "岭南道"
+            },
+            {
+                "name": "都畿道"
+            },
+            {
+                "name": "山南道"
+            },
+            {
+                "name": "山南东道"
+            },
+            {
+                "name": "河南道"
+            },
+            {
+                "name": "山南西道"
+            },
+            {
+                "name": "河东道"
+            },
+            {
+                "name": "岭南道"
+            },
+            {
+                "name": "江南东道"
+            },
+            {
+                "name": "剑南道"
+            },
+            {
+                "name": "关内道"
+            },
+            {
+                "name": "河北道"
+            },
+            {
+                "name": "江南道"
+            },
+            {
+                "name": "陇右道"
+            },
+            {
+                "name": "其它"
+            },
+            {
+                "name": "淮南道"
+            },
+            {
+                "name": "江南西道"
+            },
+            {
+                "name": "黔中道"
+            },
+            {
+                "name": "洛阳"
+            },
+            {
+                "name": "襄阳"
+            },
+            {
+                "name": "河阳"
+            },
+            {
+                "name": "梁县"
+            },
+            {
+                "name": "其它"
+            },
+            {
+                "name": "蔡州"
+            },
+            {
+                "name": "汴州"
+            },
+            {
+                "name": "登州"
+            },
+            {
+                "name": "滑州"
+            },
+            {
+                "name": "龙兴"
+            },
+            {
+                "name": "汜水"
+            },
+            {
+                "name": "潞州"
+            },
+            {
+                "name": "绛州"
+            },
+            {
+                "name": "太原"
+            },
+            {
+                "name": "乡县"
+            },
+            {
+                "name": "广州"
+            },
+            {
+                "name": "吴县"
+            },
+            {
+                "name": "长安"
+            },
+            {
+                "name": "沧州"
+            },
+            {
+                "name": "郑州"
+            },
+            {
+                "name": "范阳"
+            },
+            {
+                "name": "泾阳"
+            },
+            {
+                "name": "巩州"
+            },
+            {
+                "name": "河内"
+            },
+            {
+                "name": "来庭"
+            },
+            {
+                "name": "相州"
+            },
+            {
+                "name": "赵州"
+            },
+            {
+                "name": "洪州"
+            },
+            {
+                "name": "常州"
+            },
+            {
+                "name": "鄂州"
+            },
+            {
+                "name": "江州"
+            },
+            {
+                "name": "永昌"
+            },
+            {
+                "name": "江陵府"
+            },
+            {
+                "name": "宣州"
+            },
+            {
+                "name": "江都"
+            },
+            {
+                "name": "寿春"
+            },
+            {
+                "name": "万年"
+            },
+            {
+                "name": "庐陵"
+            }
+        ],
+        "links": [
+            {
+                "source": 0,
+                "target": 55,
+                "value": 99
+            },
+            {
+                "source": 1,
+                "target": 56,
+                "value": 47
+            },
+            {
+                "source": 2,
+                "target": 56,
+                "value": 14
+            },
+            {
+                "source": 3,
+                "target": 56,
+                "value": 15
+            },
+            {
+                "source": 4,
+                "target": 55,
+                "value": 4
+            },
+            {
+                "source": 5,
+                "target": 57,
+                "value": 3
+            },
+            {
+                "source": 6,
+                "target": 58,
+                "value": 20
+            },
+            {
+                "source": 7,
+                "target": 58,
+                "value": 14
+            },
+            {
+                "source": 8,
+                "target": 58,
+                "value": 9
+            },
+            {
+                "source": 9,
+                "target": 58,
+                "value": 9
+            },
+            {
+                "source": 10,
+                "target": 58,
+                "value": 9
+            },
+            {
+                "source": 11,
+                "target": 58,
+                "value": 9
+            },
+            {
+                "source": 12,
+                "target": 58,
+                "value": 6
+            },
+            {
+                "source": 13,
+                "target": 58,
+                "value": 3
+            },
+            {
+                "source": 14,
+                "target": 58,
+                "value": 6
+            },
+            {
+                "source": 15,
+                "target": 58,
+                "value": 3
+            },
+            {
+                "source": 16,
+                "target": 58,
+                "value": 4
+            },
+            {
+                "source": 17,
+                "target": 58,
+                "value": 3
+            },
+            {
+                "source": 18,
+                "target": 55,
+                "value": 11
+            },
+            {
+                "source": 18,
+                "target": 55,
+                "value": 11
+            },
+            {
+                "source": 18,
+                "target": 56,
+                "value": 6
+            },
+            {
+                "source": 18,
+                "target": 57,
+                "value": 1
+            },
+            {
+                "source": 18,
+                "target": 58,
+                "value": 36
+            },
+            {
+                "source": 18,
+                "target": 59,
+                "value": 46
+            },
+            {
+                "source": 18,
+                "target": 60,
+                "value": 3
+            },
+            {
+                "source": 18,
+                "target": 61,
+                "value": 4
+            },
+            {
+                "source": 18,
+                "target": 62,
+                "value": 3
+            },
+            {
+                "source": 18,
+                "target": 63,
+                "value": 12
+            },
+            {
+                "source": 18,
+                "target": 64,
+                "value": 7
+            },
+            {
+                "source": 18,
+                "target": 65,
+                "value": 13
+            },
+            {
+                "source": 18,
+                "target": 66,
+                "value": 19
+            },
+            {
+                "source": 18,
+                "target": 67,
+                "value": 6
+            },
+            {
+                "source": 18,
+                "target": 68,
+                "value": 2
+            },
+            {
+                "source": 19,
+                "target": 59,
+                "value": 28
+            },
+            {
+                "source": 20,
+                "target": 59,
+                "value": 30
+            },
+            {
+                "source": 21,
+                "target": 59,
+                "value": 21
+            },
+            {
+                "source": 22,
+                "target": 59,
+                "value": 7
+            },
+            {
+                "source": 23,
+                "target": 59,
+                "value": 9
+            },
+            {
+                "source": 24,
+                "target": 59,
+                "value": 12
+            },
+            {
+                "source": 25,
+                "target": 59,
+                "value": 5
+            },
+            {
+                "source": 26,
+                "target": 59,
+                "value": 3
+            },
+            {
+                "source": 27,
+                "target": 59,
+                "value": 5
+            },
+            {
+                "source": 28,
+                "target": 59,
+                "value": 8
+            },
+            {
+                "source": 29,
+                "target": 59,
+                "value": 4
+            },
+            {
+                "source": 30,
+                "target": 59,
+                "value": 3
+            },
+            {
+                "source": 31,
+                "target": 59,
+                "value": 3
+            },
+            {
+                "source": 32,
+                "target": 59,
+                "value": 4
+            },
+            {
+                "source": 33,
+                "target": 62,
+                "value": 24
+            },
+            {
+                "source": 34,
+                "target": 62,
+                "value": 3
+            },
+            {
+                "source": 35,
+                "target": 62,
+                "value": 3
+            },
+            {
+                "source": 36,
+                "target": 61,
+                "value": 3
+            },
+            {
+                "source": 37,
+                "target": 63,
+                "value": 37
+            },
+            {
+                "source": 38,
+                "target": 63,
+                "value": 39
+            },
+            {
+                "source": 39,
+                "target": 63,
+                "value": 14
+            },
+            {
+                "source": 40,
+                "target": 63,
+                "value": 10
+            },
+            {
+                "source": 41,
+                "target": 63,
+                "value": 3
+            },
+            {
+                "source": 42,
+                "target": 63,
+                "value": 3
+            },
+            {
+                "source": 43,
+                "target": 66,
+                "value": 48
+            },
+            {
+                "source": 44,
+                "target": 64,
+                "value": 12
+            },
+            {
+                "source": 45,
+                "target": 66,
+                "value": 13
+            },
+            {
+                "source": 46,
+                "target": 66,
+                "value": 4
+            },
+            {
+                "source": 47,
+                "target": 66,
+                "value": 5
+            },
+            {
+                "source": 48,
+                "target": 66,
+                "value": 4
+            },
+            {
+                "source": 49,
+                "target": 68,
+                "value": 12
+            },
+            {
+                "source": 50,
+                "target": 68,
+                "value": 6
+            },
+            {
+                "source": 51,
+                "target": 65,
+                "value": 7
+            },
+            {
+                "source": 52,
+                "target": 65,
+                "value": 3
+            },
+            {
+                "source": 53,
+                "target": 65,
+                "value": 3
+            },
+            {
+                "source": 54,
+                "target": 67,
+                "value": 10
+            },
+            {
+                "source": 55,
+                "target": 69,
+                "value": 46
+            },
+            {
+                "source": 56,
+                "target": 69,
+                "value": 38
+            },
+            {
+                "source": 57,
+                "target": 69,
+                "value": 1
+            },
+            {
+                "source": 58,
+                "target": 69,
+                "value": 58
+            },
+            {
+                "source": 59,
+                "target": 69,
+                "value": 69
+            },
+            {
+                "source": 60,
+                "target": 69,
+                "value": 1
+            },
+            {
+                "source": 61,
+                "target": 69,
+                "value": 2
+            },
+            {
+                "source": 62,
+                "target": 69,
+                "value": 15
+            },
+            {
+                "source": 63,
+                "target": 69,
+                "value": 44
+            },
+            {
+                "source": 64,
+                "target": 69,
+                "value": 5
+            },
+            {
+                "source": 65,
+                "target": 69,
+                "value": 3
+            },
+            {
+                "source": 66,
+                "target": 69,
+                "value": 31
+            },
+            {
+                "source": 67,
+                "target": 69,
+                "value": 4
+            },
+            {
+                "source": 68,
+                "target": 69,
+                "value": 8
+            },
+            {
+                "source": 55,
+                "target": 70,
+                "value": 2
+            },
+            {
+                "source": 58,
+                "target": 70,
+                "value": 2
+            },
+            {
+                "source": 59,
+                "target": 70,
+                "value": 1
+            },
+            {
+                "source": 63,
+                "target": 70,
+                "value": 1
+            },
+            {
+                "source": 56,
+                "target": 71,
+                "value": 3
+            },
+            {
+                "source": 57,
+                "target": 71,
+                "value": 1
+            },
+            {
+                "source": 58,
+                "target": 71,
+                "value": 5
+            },
+            {
+                "source": 59,
+                "target": 71,
+                "value": 7
+            },
+            {
+                "source": 63,
+                "target": 71,
+                "value": 1
+            },
+            {
+                "source": 66,
+                "target": 71,
+                "value": 1
+            },
+            {
+                "source": 55,
+                "target": 72,
+                "value": 15
+            },
+            {
+                "source": 56,
+                "target": 72,
+                "value": 6
+            },
+            {
+                "source": 58,
+                "target": 72,
+                "value": 6
+            },
+            {
+                "source": 59,
+                "target": 72,
+                "value": 16
+            },
+            {
+                "source": 61,
+                "target": 72,
+                "value": 2
+            },
+            {
+                "source": 62,
+                "target": 72,
+                "value": 3
+            },
+            {
+                "source": 63,
+                "target": 72,
+                "value": 10
+            },
+            {
+                "source": 64,
+                "target": 72,
+                "value": 1
+            },
+            {
+                "source": 65,
+                "target": 72,
+                "value": 2
+            },
+            {
+                "source": 66,
+                "target": 72,
+                "value": 6
+            },
+            {
+                "source": 68,
+                "target": 72,
+                "value": 1
+            },
+            {
+                "source": 56,
+                "target": 73,
+                "value": 2
+            },
+            {
+                "source": 58,
+                "target": 73,
+                "value": 1
+            },
+            {
+                "source": 59,
+                "target": 73,
+                "value": 3
+            },
+            {
+                "source": 63,
+                "target": 73,
+                "value": 1
+            },
+            {
+                "source": 65,
+                "target": 73,
+                "value": 1
+            },
+            {
+                "source": 55,
+                "target": 74,
+                "value": 4
+            },
+            {
+                "source": 56,
+                "target": 74,
+                "value": 6
+            },
+            {
+                "source": 58,
+                "target": 74,
+                "value": 6
+            },
+            {
+                "source": 59,
+                "target": 74,
+                "value": 11
+            },
+            {
+                "source": 62,
+                "target": 74,
+                "value": 1
+            },
+            {
+                "source": 63,
+                "target": 74,
+                "value": 5
+            },
+            {
+                "source": 64,
+                "target": 74,
+                "value": 1
+            },
+            {
+                "source": 65,
+                "target": 74,
+                "value": 3
+            },
+            {
+                "source": 66,
+                "target": 74,
+                "value": 1
+            },
+            {
+                "source": 55,
+                "target": 75,
+                "value": 4
+            },
+            {
+                "source": 56,
+                "target": 75,
+                "value": 1
+            },
+            {
+                "source": 58,
+                "target": 75,
+                "value": 6
+            },
+            {
+                "source": 59,
+                "target": 75,
+                "value": 2
+            },
+            {
+                "source": 62,
+                "target": 75,
+                "value": 1
+            },
+            {
+                "source": 63,
+                "target": 75,
+                "value": 5
+            },
+            {
+                "source": 65,
+                "target": 75,
+                "value": 1
+            },
+            {
+                "source": 67,
+                "target": 75,
+                "value": 1
+            },
+            {
+                "source": 55,
+                "target": 76,
+                "value": 5
+            },
+            {
+                "source": 56,
+                "target": 76,
+                "value": 2
+            },
+            {
+                "source": 57,
+                "target": 76,
+                "value": 1
+            },
+            {
+                "source": 59,
+                "target": 76,
+                "value": 3
+            },
+            {
+                "source": 62,
+                "target": 76,
+                "value": 1
+            },
+            {
+                "source": 63,
+                "target": 76,
+                "value": 5
+            },
+            {
+                "source": 64,
+                "target": 76,
+                "value": 1
+            },
+            {
+                "source": 65,
+                "target": 76,
+                "value": 2
+            },
+            {
+                "source": 66,
+                "target": 76,
+                "value": 2
+            },
+            {
+                "source": 55,
+                "target": 77,
+                "value": 3
+            },
+            {
+                "source": 58,
+                "target": 77,
+                "value": 4
+            },
+            {
+                "source": 59,
+                "target": 77,
+                "value": 3
+            },
+            {
+                "source": 61,
+                "target": 77,
+                "value": 1
+            },
+            {
+                "source": 65,
+                "target": 77,
+                "value": 1
+            },
+            {
+                "source": 66,
+                "target": 77,
+                "value": 4
+            },
+            {
+                "source": 67,
+                "target": 77,
+                "value": 1
+            },
+            {
+                "source": 68,
+                "target": 77,
+                "value": 2
+            },
+            {
+                "source": 55,
+                "target": 78,
+                "value": 17
+            },
+            {
+                "source": 56,
+                "target": 78,
+                "value": 14
+            },
+            {
+                "source": 57,
+                "target": 78,
+                "value": 1
+            },
+            {
+                "source": 58,
+                "target": 78,
+                "value": 13
+            },
+            {
+                "source": 59,
+                "target": 78,
+                "value": 21
+            },
+            {
+                "source": 62,
+                "target": 78,
+                "value": 6
+            },
+            {
+                "source": 63,
+                "target": 78,
+                "value": 20
+            },
+            {
+                "source": 64,
+                "target": 78,
+                "value": 8
+            },
+            {
+                "source": 65,
+                "target": 78,
+                "value": 3
+            },
+            {
+                "source": 66,
+                "target": 78,
+                "value": 17
+            },
+            {
+                "source": 67,
+                "target": 78,
+                "value": 1
+            },
+            {
+                "source": 68,
+                "target": 78,
+                "value": 3
+            },
+            {
+                "source": 55,
+                "target": 79,
+                "value": 5
+            },
+            {
+                "source": 56,
+                "target": 79,
+                "value": 2
+            },
+            {
+                "source": 58,
+                "target": 79,
+                "value": 6
+            },
+            {
+                "source": 59,
+                "target": 79,
+                "value": 27
+            },
+            {
+                "source": 62,
+                "target": 79,
+                "value": 2
+            },
+            {
+                "source": 63,
+                "target": 79,
+                "value": 10
+            },
+            {
+                "source": 65,
+                "target": 79,
+                "value": 3
+            },
+            {
+                "source": 66,
+                "target": 79,
+                "value": 6
+            },
+            {
+                "source": 55,
+                "target": 80,
+                "value": 4
+            },
+            {
+                "source": 56,
+                "target": 80,
+                "value": 4
+            },
+            {
+                "source": 58,
+                "target": 80,
+                "value": 4
+            },
+            {
+                "source": 59,
+                "target": 80,
+                "value": 7
+            },
+            {
+                "source": 61,
+                "target": 80,
+                "value": 1
+            },
+            {
+                "source": 62,
+                "target": 80,
+                "value": 2
+            },
+            {
+                "source": 63,
+                "target": 80,
+                "value": 4
+            },
+            {
+                "source": 64,
+                "target": 80,
+                "value": 2
+            },
+            {
+                "source": 65,
+                "target": 80,
+                "value": 2
+            },
+            {
+                "source": 66,
+                "target": 80,
+                "value": 5
+            },
+            {
+                "source": 67,
+                "target": 80,
+                "value": 2
+            },
+            {
+                "source": 55,
+                "target": 81,
+                "value": 2
+            },
+            {
+                "source": 56,
+                "target": 81,
+                "value": 1
+            },
+            {
+                "source": 58,
+                "target": 81,
+                "value": 2
+            },
+            {
+                "source": 62,
+                "target": 81,
+                "value": 1
+            },
+            {
+                "source": 63,
+                "target": 81,
+                "value": 1
+            },
+            {
+                "source": 65,
+                "target": 81,
+                "value": 1
+            },
+            {
+                "source": 66,
+                "target": 81,
+                "value": 1
+            },
+            {
+                "source": 68,
+                "target": 81,
+                "value": 1
+            },
+            {
+                "source": 55,
+                "target": 82,
+                "value": 1
+            },
+            {
+                "source": 56,
+                "target": 82,
+                "value": 1
+            },
+            {
+                "source": 58,
+                "target": 82,
+                "value": 4
+            },
+            {
+                "source": 59,
+                "target": 82,
+                "value": 2
+            },
+            {
+                "source": 60,
+                "target": 82,
+                "value": 1
+            },
+            {
+                "source": 65,
+                "target": 82,
+                "value": 1
+            },
+            {
+                "source": 66,
+                "target": 82,
+                "value": 3
+            },
+            {
+                "source": 68,
+                "target": 82,
+                "value": 3
+            },
+            {
+                "source": 55,
+                "target": 83,
+                "value": 2
+            },
+            {
+                "source": 56,
+                "target": 83,
+                "value": 1
+            },
+            {
+                "source": 58,
+                "target": 83,
+                "value": 7
+            },
+            {
+                "source": 59,
+                "target": 83,
+                "value": 7
+            },
+            {
+                "source": 63,
+                "target": 83,
+                "value": 4
+            },
+            {
+                "source": 65,
+                "target": 83,
+                "value": 1
+            },
+            {
+                "source": 66,
+                "target": 83,
+                "value": 4
+            },
+            {
+                "source": 67,
+                "target": 83,
+                "value": 5
+            },
+            {
+                "source": 68,
+                "target": 83,
+                "value": 1
+            },
+            {
+                "source": 55,
+                "target": 84,
+                "value": 4
+            },
+            {
+                "source": 56,
+                "target": 84,
+                "value": 1
+            },
+            {
+                "source": 58,
+                "target": 84,
+                "value": 7
+            },
+            {
+                "source": 59,
+                "target": 84,
+                "value": 9
+            },
+            {
+                "source": 60,
+                "target": 84,
+                "value": 1
+            },
+            {
+                "source": 61,
+                "target": 83,
+                "value": 1
+            },
+            {
+                "source": 62,
+                "target": 84,
+                "value": 1
+            },
+            {
+                "source": 63,
+                "target": 84,
+                "value": 5
+            },
+            {
+                "source": 64,
+                "target": 84,
+                "value": 1
+            },
+            {
+                "source": 65,
+                "target": 84,
+                "value": 2
+            },
+            {
+                "source": 66,
+                "target": 84,
+                "value": 10
+            },
+            {
+                "source": 67,
+                "target": 84,
+                "value": 2
+            },
+            {
+                "source": 68,
+                "target": 84,
+                "value": 1
+            },
+            {
+                "source": 63,
+                "target": 85,
+                "value": 1
+            },
+            {
+                "source": 69,
+                "target": 86,
+                "value": 305
+            },
+            {
+                "source": 69,
+                "target": 88,
+                "value": 6
+            },
+            {
+                "source": 69,
+                "target": 89,
+                "value": 4
+            },
+            {
+                "source": 69,
+                "target": 90,
+                "value": 10
+            },
+            {
+                "source": 70,
+                "target": 90,
+                "value": 6
+            },
+            {
+                "source": 71,
+                "target": 87,
+                "value": 10
+            },
+            {
+                "source": 71,
+                "target": 90,
+                "value": 8
+            },
+            {
+                "source": 72,
+                "target": 90,
+                "value": 49
+            },
+            {
+                "source": 72,
+                "target": 91,
+                "value": 4
+            },
+            {
+                "source": 72,
+                "target": 92,
+                "value": 3
+            },
+            {
+                "source": 72,
+                "target": 93,
+                "value": 3
+            },
+            {
+                "source": 72,
+                "target": 94,
+                "value": 3
+            },
+            {
+                "source": 72,
+                "target": 95,
+                "value": 3
+            },
+            {
+                "source": 72,
+                "target": 96,
+                "value": 3
+            },
+            {
+                "source": 73,
+                "target": 90,
+                "value": 8
+            },
+            {
+                "source": 74,
+                "target": 90,
+                "value": 21
+            },
+            {
+                "source": 74,
+                "target": 97,
+                "value": 5
+            },
+            {
+                "source": 74,
+                "target": 98,
+                "value": 3
+            },
+            {
+                "source": 74,
+                "target": 99,
+                "value": 4
+            },
+            {
+                "source": 74,
+                "target": 100,
+                "value": 5
+            },
+            {
+                "source": 75,
+                "target": 90,
+                "value": 18
+            },
+            {
+                "source": 75,
+                "target": 101,
+                "value": 5
+            },
+            {
+                "source": 76,
+                "target": 90,
+                "value": 19
+            },
+            {
+                "source": 76,
+                "target": 102,
+                "value": 3
+            },
+            {
+                "source": 77,
+                "target": 90,
+                "value": 19
+            },
+            {
+                "source": 78,
+                "target": 90,
+                "value": 24
+            },
+            {
+                "source": 78,
+                "target": 103,
+                "value": 88
+            },
+            {
+                "source": 78,
+                "target": 105,
+                "value": 9
+            },
+            {
+                "source": 78,
+                "target": 107,
+                "value": 3
+            },
+            {
+                "source": 79,
+                "target": 90,
+                "value": 38
+            },
+            {
+                "source": 79,
+                "target": 104,
+                "value": 5
+            },
+            {
+                "source": 79,
+                "target": 106,
+                "value": 3
+            },
+            {
+                "source": 79,
+                "target": 108,
+                "value": 3
+            },
+            {
+                "source": 79,
+                "target": 109,
+                "value": 3
+            },
+            {
+                "source": 79,
+                "target": 110,
+                "value": 3
+            },
+            {
+                "source": 79,
+                "target": 111,
+                "value": 3
+            },
+            {
+                "source": 79,
+                "target": 112,
+                "value": 3
+            },
+            {
+                "source": 80,
+                "target": 90,
+                "value": 20
+            },
+            {
+                "source": 80,
+                "target": 113,
+                "value": 7
+            },
+            {
+                "source": 80,
+                "target": 114,
+                "value": 4
+            },
+            {
+                "source": 80,
+                "target": 115,
+                "value": 3
+            },
+            {
+                "source": 80,
+                "target": 116,
+                "value": 3
+            },
+            {
+                "source": 81,
+                "target": 90,
+                "value": 2
+            },
+            {
+                "source": 81,
+                "target": 117,
+                "value": 9
+            },
+            {
+                "source": 82,
+                "target": 90,
+                "value": 4
+            },
+            {
+                "source": 82,
+                "target": 118,
+                "value": 9
+            },
+            {
+                "source": 82,
+                "target": 119,
+                "value": 3
+            },
+            {
+                "source": 83,
+                "target": 90,
+                "value": 8
+            },
+            {
+                "source": 83,
+                "target": 120,
+                "value": 21
+            },
+            {
+                "source": 83,
+                "target": 121,
+                "value": 3
+            },
+            {
+                "source": 84,
+                "target": 90,
+                "value": 5
+            },
+            {
+                "source": 84,
+                "target": 122,
+                "value": 36
+            },
+            {
+                "source": 84,
+                "target": 123,
+                "value": 4
+            },
+            {
+                "source": 85,
+                "target": 90,
+                "value": 1
+            }            
+        ]
+        };
+
+
+        var margin = {top: 3, right: 1, bottom: 3, left: 1},
+            width = window.innerWidth*0.5 - margin.left - margin.right,
+            height = window.innerHeight*0.95 - margin.top - margin.bottom;
+
+        var formatNumber = d3.format(",.0f"),
+            format = function(d) { return formatNumber(d); },
+            color = d3.scale.category20();
+
+        var svg = d3.select("#chart").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            
+        var sankey = d3.sankey()
+            .nodeWidth(30)
+            .nodePadding(5)
+            .size([width, height]);
+
+        var path = sankey.link();
+
+
+        sankey
+            .nodes(json.nodes)
+            .links(json.links)
+            .layout(32);
+
+        var link = svg.append("g").selectAll(".link")
+            .data(json.links)
+            .enter().append("path")
+            .attr("class", "link")
+            .attr("d", path)
+            .style("stroke-width", function(d) { return Math.max(1, d.dy); })
+            .sort(function(a, b) { return b.dy - a.dy; });
+
+        // link.append("title")
+        //     .text(function(d) { return d.source.name + " → " + d.target.name + ": " + format(d.value); });
+        
+        var node = svg.append("g").selectAll(".node")
+            .data(json.nodes)
+            .enter().append("g")
+            .attr("class", "node")
+            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+            .call(d3.behavior.drag()
+            .origin(function(d) { return d; })
+            .on("dragstart", function() { this.parentNode.appendChild(this); })
+            .on("drag", dragmove));
+
+        var colorArray = ["#00577f", "#439083", "#aa5723", "#467c84", "#cd8a2f", "#93b694", "#08b1d8", "#aa4f2b", "#86bcc0", "#d87338", "#bfdddb", "#e5b88b",
+                          "#037796", "#0294bc", "#1facb0", "#71b4d3", "#9e4c46", "#e0a99b", "#b3342a", "#4aa595", "#e7d188", "#6bacaf", "#d3a07a", "#bed0a4"];
+        node.append("rect")
+            .attr("height", function(d) { return d.dy; })
+            .attr("width", sankey.nodeWidth())
+            .style("fill", function(d, i) { return colorArray[i % colorArray.length]; })
+            .style("stroke", function(d, i) { return d3.rgb(colorArray[i % colorArray.length]).darker(0); })
+            .append("title")
+            // .text(function(d) { return d.name + ": " + format(d.value); })
+
+        node.append("text")
+            .attr("x", -6)
+            .attr("y", function(d) { return d.dy / 2; })
+            .attr("dy", ".35em")
+            .attr("text-anchor", "end")
+            .attr("transform", null)
+            .text(function(d) { return d.name; })
+            .filter(function(d) { return d.x < width / 2; })
+            .attr("x", 6 + sankey.nodeWidth())
+            .attr("text-anchor", "start");
+        
+            // 在鼠标悬浮在节点上的时候显示自定义悬浮框
+            node.on("mouseover", function(d) {
+                d3.select("#tooltip")
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 28) + "px")
+                    .style("opacity", 0.9)
+                    .html(d.name + ": " + format(d.value));
+            });
+
+            // 鼠标移出节点的时候隐藏自定义悬浮框
+            node.on("mouseout", function(d) {
+                d3.select("#tooltip").style("opacity", 0);
+            });
+
+            // 在鼠标悬浮在节点上的时候显示自定义悬浮框
+            link.on("mouseover", function(d) {
+                d3.select("#tooltip")
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 28) + "px")
+                    .style("opacity", 0.9)
+                    .html(d.source.name + " → " + d.target.name + ": " + format(d.value));
+            });
+
+            // 鼠标移出节点的时候隐藏自定义悬浮框
+            link.on("mouseout", function(d) {
+                d3.select("#tooltip").style("opacity", 0);
+            });
+        
+            function dragmove(d) {
+            d3.select(this).attr("transform", "translate(" + d.x + "," + (d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))) + ")");
+            sankey.relayout();
+            link.attr("d", path);
+        }
+    </script>
+    
+</body>
+</html>

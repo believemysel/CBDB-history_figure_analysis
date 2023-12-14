@@ -18,7 +18,7 @@
     <div id="left-text"
         style="position: absolute; top: 50%; left: 2%; transform: translateY(-50%); font-size: 16px; color: black;font-family:  KaiTi, serif;">
         <p>
-            <span style="font-size: 20px; color: #95302e;font-weight: bold;">唐朝人物关系多维饼状图：</span><br><br>
+            <span style="font-size: 25px; color: black;font-weight: bold;">唐朝人物关系多维饼状图：</span><br><br>
             由内层到外层依次细化，<br><br>
             从<span style="font-size: 18px; color: #95302e;font-weight: bold;">大类</span>，到<span style="font-size: 18px; color: #95302e;font-weight: bold;">子类</span>，再到<span style="font-size: 18px; color: #95302e;font-weight: bold;">具体条目</span>，<br><br>
             可视化了数据库中收录的著作中<br><br>
@@ -86,7 +86,8 @@
                         formatter: function (d) { return d.name; },
                         fontSize: 9, // 标签字体大小
                         //fontWeight: 'bold',
-                        color: '#fff' // 标签字体颜色
+                        color: '#fff' ,// 标签字体颜色
+                        //rotate: 'radial', // 添加rotate属性
                     },
                     emphasis: {
                         label: {
@@ -94,6 +95,7 @@
                             //position: 'inside',
                             fontSize: 13,
                             fontWeight: 'bold',
+                           // rotate: 'radial', // 添加rotate属性
                             //color: 'black'
                         }
                     },

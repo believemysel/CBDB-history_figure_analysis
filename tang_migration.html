@@ -2,14 +2,16 @@
 <html style="height: 100%">
 
 <head>
+    <script src="assects/js/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/dataTool.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/bmap.min.js"></script>
-    <script src="assects/js/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- <script src="assects/js/echarts.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.0.2/dist/echarts.min.js"></script>
+      
+    <script src="js/jquery.min.js"></script>
+    <script src="js/echarts.js"></script>
+    <script src="js/china.js"></script>
+   
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
     <style>
@@ -19,8 +21,8 @@
         }
 
         .map {
-            width: 1400px;
-            height: 800px;
+            width: 100vw;
+            height: 100vh;
             margin: 0 auto;
         }
 
@@ -34,7 +36,6 @@
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 </head>
-
 
 <body style="height: 100%; margin: 0">
     <div id="main" class="map height=100% width='1000px'"></div>
@@ -33819,16 +33820,17 @@
                 subtext: '地图：Tang Empire 741, using the Cambridge History of China',
                 target: "blank", //'self' 当前窗口打开，'blank' 新窗口打开
                 padding: 5, // 标题内边距 5  [5, 10]  [5,10,5,10]
-                top: 30,
+                top: '52%',
+                left: '3%',
                 x: 'center',
                 right: "auto", // 组件离容器右侧的距离,'20%'
                 bottom: "auto", // 组件离容器下侧的距离,'20%'
                 textStyle: {
-                    color: "#726930", //文字颜色
+                    color: "black", //文字颜色
                     fontStyle: "normal", // italic斜体  oblique倾斜
                     fontWeight: "bold", // 文字粗细bold   bolder   lighter  100 | 200 | 300 | 400...
-                    fontFamily: "sans-serif", // 字体系列
-                    fontSize: 25, // 字体大小
+                    fontFamily: "KaiTi, serif", // 字体系列
+                    fontSize: 28, // 字体大小
                 }
             },
             toolbox: {
@@ -33854,11 +33856,12 @@
             legend: {
                 show: true,
                 orient: 'vertical',
-                top: '15%',
-                left: '5%',
+                top: '66%',
+                left: '2%',
                 data: ['地点（橙色表示死亡人数>出生人数，蓝色反之）', '迁徙路线（生地->卒地)'],
                 textStyle: {
                     color: '#274d3d',
+                    fontFamily: 'Kaiti',
                     fontSize: 16 // 字体大小
                 }
             },
@@ -33866,7 +33869,7 @@
                 show: true, // 是否显示
                 map: 'Tang',
                 // 其他配置项
-                //决定地图上是否触发事件。如果设置为true，它将不会响应用户交互。
+                silent:false,//决定地图上是否触发事件。如果设置为true，它将不会响应用户交互。
                 label: {
                     emphasis: {// 是否在高亮状态下显示标签。(省份名称)
                         show: true,
@@ -33874,18 +33877,18 @@
                         fontFamily: 'monospace'
                     }
                 },
-                center: [110.97, 40.01],
+                center: [110.97, 34.01],
                 roam: true, // 是否开启鼠标缩放和平移漫游。
                 zlevel: -10,
                 z: 0,
-                zoom: 1.1,// 指定地图的初始缩放级别
+                zoom: 2.5,// 指定地图的初始缩放级别
                 itemStyle: {// 地图板块区域的多边形 图形样式
                     normal: { // 默认板块信息
-                        areaColor: '#fffffb',// 地图区域的填充颜色
+                        areaColor: '#323c48',// 地图区域的填充颜色
                         borderColor: '#d3d7d4'// 地图区域的边框颜色
                     },
                     emphasis: {// 高亮版板块信息
-                        areaColor: '#f2eada',// 突出显示区域时填充颜色
+                        areaColor: '#6e87a4',// 突出显示区域时填充颜色
                         opacity: '90%'// 突出显示区域的不透明度
                     }
                 },
@@ -33903,23 +33906,24 @@
                     showEffectOn: 'render',
                     label: {
                         normal: {
-                            show: false,                  //是否显示标签。
-                            position: "inside",          //标签的位置。// 绝对的像素值[10, 10],// 相对的百分比['50%', '50%'].'top','left','right','bottom','inside','insideLeft','insideRight','insideTop','insideBottom','insideTopLeft','insideBottomLeft','insideTopRight','insideBottomRight'
-                            offset: [30, 40],             //是否对文字进行偏移。默认不偏移。例如：[30, 40] 表示文字在横向上偏移 30，纵向上偏移 40。
-                            formatter: function (params) {
-                                return params.name + ': ' + params.value[2] + '人';
+                            show: false,                  //默认情况下不显示标签
+                            position: "right",          //标签的位置。// 绝对的像素值[10, 10],// 相对的百分比['50%', '50%'].'top','left','right','bottom','inside','insideLeft','insideRight','insideTop','insideBottom','insideTopLeft','insideBottomLeft','insideTopRight','insideBottomRight'
+                           // offset: [30, 40],             //是否对文字进行偏移。默认不偏移。例如：[30, 40] 表示文字在横向上偏移 30，纵向上偏移 40。
+                            formatter: function (params) {//标签内容格式器。模板变量有 {a}、{b}、{c}，分别表示系列名，数据名，数据值。
+                                if(params.value[3] >= 10 || params.value[2] >= 10 )
+                                    return params.name + ': ' + params.value[3] + '人/' + params.value[2] + '人';
+                                else return ' ';
                             }
-                            //标签内容格式器。模板变量有 {a}、{b}、{c}，分别表示系列名，数据名，数据值。
                         },
                         emphasis: {
-                            show: true,
+                            show: true,                    //鼠标悬停时是否显示标签
                             position: 'right',
                             formatter: '{b}'
-
                         }
                     },
                     itemStyle: {
                         color: '#F58158',
+                        fontFamily: 'Kaiti'
                     },
                     data: allData.cities
                 },
@@ -33956,7 +33960,7 @@
                         }
                     },
                     data: allData.moveLines
-                },
+                },   
                 {
                     name: {
                         text: '卒地排名',
@@ -33976,7 +33980,7 @@
                     label: {
                         normal: {
                             show: false,
-                            position: 'insideRight',
+                            position: 'right',
                             textStyle: {
                                 color: '#b4534b', // Specify the color you want for the labels
                                 fontSize: 16,  // 设置条形图上标签的字体大小
@@ -33985,7 +33989,7 @@
                         emphasis: {
                             show: true,
                             formatter: '{b}',
-                            position: 'insideRight',
+                            position: 'right',
                             textStyle: {
                                 color: '#b4534b', // Specify the color you want for the labels
                                 fontSize: 16,  // 设置条形图上标签的字体大小
@@ -33995,28 +33999,27 @@
                     },
                     data: deathplace.slice(0, 5)
                 },
-
                 {
                     name: {
                         text: '生地排名',
                         textStyle: {
-                            color: '#b4534b' // Specify the color you want
+                            color: '#58B3CC' // Specify the color you want
                         }
                     },
                     type: 'bar',
                     itemStyle: {
                         normal: {
-                            color: '#003a6c'
+                            color: '#58B3CC'
                         }
                     },
                     label: {
                         normal: {
                             show: false,
-                            position: 'insideRight'
+                            position: 'right'
                         },
                         emphasis: {
                             show: true,
-                            position: 'insideRight',
+                            position: 'right',
                             formatter: '{c}人'
                         }
                     },
@@ -34031,12 +34034,13 @@
                 inverse: true,
                 name: '卒地排名',
                 nameTextStyle: {
-                    fontSize: 16  // 设置坐标轴标题的字体大小
+                    fontSize: 22,  // 设置坐标轴标题的字体大小
+                    fontFamily: 'Kaiti'
                 },
                 nameLocation: 'start',
                 axisLine: { show: false, lineStyle: { color: '#b4534b' } },
                 axisTick: { show: false, lineStyle: { color: '#b4534b' } },
-                axisLabel: { interval: 0, textStyle: { color: '#b4534b', fontSize: 16 } },
+                axisLabel: { interval: 0, textStyle: { color: '#b4534b', fontSize: 16, fontFamily: 'Kaiti' } },
                 gridIndex: 0
             },
             {
@@ -34045,12 +34049,13 @@
                 inverse: true,
                 name: '生地排名',
                 nameTextStyle: {
-                    fontSize: 16  // 设置坐标轴标题的字体大小
+                    fontSize: 22,  // 设置坐标轴标题的字体大小
+                    fontFamily: 'Kaiti'
                 },
                 nameLocation: 'start',
-                axisLine: { show: false, lineStyle: { color: '#003a6c' } },
-                axisTick: { show: false, lineStyle: { color: '#003a6c' } },
-                axisLabel: { interval: 0, textStyle: { color: '#003a6c', fontSize: 16 } }, //列标签
+                axisLine: { show: false, lineStyle: { color: '#58B3CC' } },
+                axisTick: { show: false, lineStyle: { color: '#58B3CC' } },
+                axisLabel: { interval: 0, textStyle: { color: '#58B3CC', fontSize: 16, fontFamily: 'Kaiti' } }, //列标签
                 gridIndex: 1,
 
             }],
@@ -34076,6 +34081,7 @@
         };
 
         myChart.setOption(options);
+        
 
     </script>
 
